@@ -5,9 +5,9 @@ services:
     container_name: base_datos
     environment:
       - MYSQL_DATABASE=taller
-      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=12345
     ports:
-      - 3307:3306
+      - 3306:3306
     volumes:
       - ./db-dump:/docker-entrypoint-initdb.db
       - ./mysql:/var/lib/mysql
@@ -21,12 +21,13 @@ services:
       - PMA_PORT=3306
   web:
     container_name: servidor-web
+    #Se cambio el volumen
+    volumes:
+      - ./www/src:/var/www/html/src
+      # - ./www:/var/www/html
     build: 
       context: .
       dockerfile: ./www/Dockerfile
-    volumes:
-      #Mapeo de la carpeta www, todo lo relacionado al servidor-web va en esta carpeta
-      - ./www:/var/www/html
     ports:
       - 8000:80
 volumes:

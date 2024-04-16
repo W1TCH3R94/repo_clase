@@ -22,11 +22,17 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
 #Se copia la configuracion de composer para instalar slim y psr-7 en el contenedor
 COPY ./www/composer.json .
 
+COPY ./www/public/ ./public/
+
+COPY ./www/.htaccess .
+
 #Instalando git en el servidor-web ya que se requiere para descargar desde un repositorio
 RUN apt update && apt install -y git
 
 #Comando que instala composer en el servidor-web
 RUN composer install 
+
+RUN composer dump-autoload
 
 #Se modifica el Documento Root del servidor apache para modificar la ruta predeterminada que accede al index
 RUN sed -i 's/DocumentRoot.*$/DocumentRoot \/var\/www\/html\/public/' /etc/apache2/sites-enabled/000-default.conf
